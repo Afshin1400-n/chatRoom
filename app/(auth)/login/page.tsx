@@ -5,69 +5,81 @@ import { useRouter } from "next/navigation";
 import { useAuthStore } from "../../store/useAuthStore";
 
 export default function Login() {
-  const [nationalId, setNationalId] = useState<string>("");
+  const [name, setName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
 
-  const drivers = useAuthStore((s) => s.drivers);
+  const person = useAuthStore((s) => s.person);
   const login = useAuthStore((s) => s.login);
   const router = useRouter();
 
   const handleSubmit = (): void => {
     setError("");
 
-    if (nationalId.trim() === "" || password.trim() === "") {
+    if (name.trim() === "" || password.trim() === "") {
       setError("نام و رمز را وارد کنید");
       return;
     }
 
-    const foundDriver = drivers.find(
-      (driver) =>
-        driver.nationalId === nationalId && driver.password === password
+    const foundPerson = person.find(
+      (driver) => driver.name === name && driver.password === password
     );
 
-    if (foundDriver) {
-      login(foundDriver);
+    if (foundPerson) {
+      login(foundPerson);
       document.cookie = "token=demo; path=/";
-      router.push("/dashboard");
+      router.push("/chat");
     } else {
       setError("کد ملی یا رمز اشتباه است");
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-200 flex items-center justify-center p-6">
-      <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-sm border border-gray-300">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2 text-center">ورود</h1>
-        <p className="text-sm text-gray-600 text-center mb-6">
-          به سیستم نوبت‌دهی خوش آمدید
+    <div className="min-h-screen bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-700 flex items-center justify-center p-6">
+      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-sm p-8">
+        {/* آیکون */}
+        <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+          <span className="text-white text-2xl font-extrabold">و</span>
+        </div>
+
+        {/* عنوان */}
+        <h1 className="text-2xl font-extrabold text-gray-900 text-center mb-2">
+          ورود
+        </h1>
+        <p className="text-sm text-gray-500 text-center mb-6">
+          به چت‌روم خوش آمدید
         </p>
 
+        {/* فرم */}
         <form className="flex flex-col gap-4">
           <div>
-            <label className="block text-sm text-gray-800 mb-1">نام و نام خانوادگی</label>
+            <label className="block text-sm font-semibold text-gray-700 mb-1">
+              نام و نام خانوادگی
+            </label>
             <input
-              value={nationalId}
-              onChange={(e) => setNationalId(e.target.value)}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               type="text"
               placeholder="نام خود را وارد نمایید"
-              className="w-full border border-gray-400 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           <div>
-            <label className="block text-sm text-gray-800 mb-1">رمز عبور</label>
+            <label className="block text-sm font-semibold text-gray-700 mb-1">
+              رمز عبور
+            </label>
             <input
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               type="password"
               placeholder="••••••••"
-              className="w-full border border-gray-400 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           {error && (
-            <p className="text-red-500 text-sm bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+            <p className="text-red-500 text-sm bg-red-50 border border-red-200 rounded-xl px-4 py-3">
               {error}
             </p>
           )}
@@ -75,15 +87,15 @@ export default function Login() {
           <button
             onClick={handleSubmit}
             type="button"
-            className="bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium transition"
+            className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white py-3 rounded-xl text-base font-bold transition shadow-md"
           >
             ورود
           </button>
         </form>
 
-        <p className="text-sm text-gray-600 text-center mt-6">
+        <p className="text-sm text-gray-500 text-center mt-6">
           حساب ندارید؟{" "}
-          <Link href="/register" className="text-blue-600 hover:underline">
+          <Link href="/register" className="text-blue-600 hover:underline font-semibold">
             ثبت‌نام
           </Link>
         </p>
