@@ -43,6 +43,7 @@ export default function Register() {
       id: Date.now(),
       name,
       password,
+      status:false,
     });
 
     router.push("/login");

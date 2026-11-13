@@ -27,6 +27,7 @@ export default function Login() {
 
     if (foundPerson) {
       login(foundPerson);
+      
       document.cookie = "token=demo; path=/";
       router.push("/chat");
     } else {
